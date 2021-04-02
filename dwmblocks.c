@@ -1,8 +1,11 @@
+#include<time.h>
 #include<stdlib.h>
 #include<stdio.h>
 #include<string.h>
 #include<unistd.h>
 #include<signal.h>
+#include<stdint.h>
+#include<X11/Xlib.h>
 #ifndef NO_X
 #include<X11/Xlib.h>
 #endif
@@ -14,12 +17,13 @@
 #define SIGMINUS		SIGRTMIN
 #endif
 #define LENGTH(X)               (sizeof(X) / sizeof (X[0]))
-#define CMDLENGTH		50
+#define CMDLENGTH 124
 #define MIN( a, b ) ( ( a < b) ? a : b )
 #define STATUSLENGTH (LENGTH(blocks) * CMDLENGTH + 1)
 
 typedef struct {
 	char* icon;
+	unsigned int isFunc;
 	char* command;
 	unsigned int interval;
 	unsigned int signal;
@@ -47,8 +51,9 @@ static Window root;
 static void (*writestatus) () = pstdout;
 #endif
 
-
-#include "blocks.h"
+#include "colors.c"
+#include "config.h"
+#include "comp.c"
 
 static char statusbar[LENGTH(blocks)][CMDLENGTH] = {0};
 static char statusstr[2][STATUSLENGTH];
@@ -58,26 +63,35 @@ static int returnStatus = 0;
 //opens process *cmd and stores output in *output
 void getcmd(const Block *block, char *output)
 {
-	strcpy(output, block->icon);
-	FILE *cmdf = popen(block->command, "r");
-	if (!cmdf)
-		return;
-	int i = strlen(block->icon);
-	fgets(output+i, CMDLENGTH-i-delimLen, cmdf);
-	i = strlen(output);
-	if (i == 0) {
-		//return if block and command output are both empty
-		pclose(cmdf);
-		return;
-	}
-	if (delim[0] != '\0') {
-		//only chop off newline if one is present at the end
-		i = output[i-1] == '\n' ? i-1 : i;
-		strncpy(output+i, delim, delimLen); 
+	int isfunc = block->isFunc;
+	if (isfunc != 1)	// If the block has IsFunc set to 0
+	{
+		strcpy(output, block->icon);
+		FILE *cmdf = popen(block->command, "r");
+        if (!cmdf)
+                return;
+        int i = strlen(block->icon);
+        fgets(output+i, CMDLENGTH-i-delimLen, cmdf);
+        i = strlen(output);
+		if (i == 0) {
+			//return if block and command output are both empty
+			pclose(cmdf);
+			return;
+		}
+		if (delim[0] != '\0') {
+			//only chop off newline if one is present at the end
+			i = output[i-1] == '\n' ? i-1 : i;
+			strncpy(output+i, delim, delimLen);
+		}
+		else
+			output[i++] = '\0';
+        pclose(cmdf);
 	}
 	else
-		output[i++] = '\0';
-	pclose(cmdf);
+	{
+		strcpy(output, block->icon);
+		getstsmods(block->command, output);	// If the block has IsFunc set to 1
+	}
 }
 
 void getcmds(int time)
@@ -122,13 +136,13 @@ int getstatus(char *str, char *last)
 	for (unsigned int i = 0; i < LENGTH(blocks); i++)
 		strcat(str, statusbar[i]);
 	str[strlen(str)-strlen(delim)] = '\0';
-	return strcmp(str, last);//0 if they are the same
+	return strcmp(str, last);	//0 if they are the same
 }
 
 #ifndef NO_X
 void setroot()
 {
-	if (!getstatus(statusstr[0], statusstr[1]))//Only set root if text has changed.
+	if (!getstatus(statusstr[0], statusstr[1]))	//Only set root if text has changed.
 		return;
 	XStoreName(dpy, root, statusstr[0]);
 	XFlush(dpy);
@@ -149,7 +163,7 @@ int setupX()
 
 void pstdout()
 {
-	if (!getstatus(statusstr[0], statusstr[1]))//Only write out if text has changed.
+	if (!getstatus(statusstr[0], statusstr[1]))	//Only write out if text has changed.
 		return;
 	printf("%s\n",statusstr[0]);
 	fflush(stdout);
@@ -166,7 +180,7 @@ void statusloop()
 		writestatus();
 		if (!statusContinue)
 			break;
-		sleep(1.0);
+		usleep(999.8*1000);
 	}
 }
 
@@ -191,7 +205,14 @@ void termhandler()
 
 int main(int argc, char** argv)
 {
-	for (int i = 0; i < argc; i++) {//Handle command line arguments
+	sprintf(wifi_opstate, "/sys/class/net/%s/operstate", network_wifi_name);
+	sprintf(wifi_rxbytes, "/sys/class/net/%s/statistics/rx_bytes", network_wifi_name);
+	sprintf(lan_opstate, "/sys/class/net/%s/operstate", network_lan_name);
+	sprintf(max_brightness, "/sys/class/backlight/%s/max_brightness", backlight_driver_name);
+	sprintf(brightness, "/sys/class/backlight/%s/brightness", backlight_driver_name);
+	sprintf(battery, "/sys/class/power_supply/%s/capacity", power_battery_name);
+	sprintf(adapter, "/sys/class/power_supply/%s/online", power_adapter_name);
+	for (int i = 0; i < argc; i++) { //Handle command line arguments
 		if (!strcmp("-d",argv[i]))
 			strncpy(delim, argv[++i], delimLen);
 		else if (!strcmp("-p",argv[i]))
