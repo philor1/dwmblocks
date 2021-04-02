@@ -62,6 +62,18 @@ static char button[] = "\0";
 static int statusContinue = 1;
 static int returnStatus = 0;
 
+int gcd(int a, int b)
+{
+	int temp;
+	while (b > 0){
+		temp = a % b;
+
+		a = b;
+		b = temp;
+	}
+	return a;
+}
+
 //opens process *cmd and stores output in *output
 void getcmd(const Block *block, char *output)
 {
@@ -195,14 +207,27 @@ void pstdout()
 void statusloop()
 {
 	setupsignals();
-	int i = 0;
+	unsigned int interval = -1;
+	for(int i = 0; i < LENGTH(blocks); i++){
+		if(blocks[i].interval){
+			interval = gcd(blocks[i].interval, interval);
+		}
+	}
+	unsigned int i = 0;
+	int interrupted = 0;
+	struct timespec sleeptime = {interval, 0};
+	struct timespec tosleep = sleeptime;
 	getcmds(-1);
 	while (1) {
+		interrupted = nanosleep(&tosleep, &tosleep);
+		if(interrupted == -1){
+			continue;
+		}
 		getcmds(i++);
 		writestatus();
 		if (!statusContinue)
 			break;
-		usleep(999.8*1000);
+		tosleep = sleeptime;
 	}
 }
 
