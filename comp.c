@@ -16,7 +16,7 @@ static long double totalJiffies1;
 static long double workJiffiesDiff;
 static long double totalJiffiesDiff;
 
-const char *getstsmods(const char *fak, char *value)
+const char *getstsmods(int clk, const char *fak, char *value)
 {
 	int i = strlen(value);
 	time_t t;
