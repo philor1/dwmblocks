@@ -484,33 +484,43 @@ const char *getstsmods(int clk, const char *fak, char *value)
 			fscanf(file, "%s", mute);
 			fclose(file);
 			if (mute[0] != 'f'){
+
 				int vol;
 				file = popen("amixer sget Master | tail -n 1 | cut -d ' ' -f6 | tr -d -c 0-9", "r");
 				fscanf(file, "%d", &vol);
 				fclose(file);
+
+				int server;
+				file = popen("pidof pipewire || echo 0", "r");
+				fscanf(file, "%d", &server);
+				fclose(file);
+
+				if (vol == 0)
+					sprintf(value+i, "%s%s", server == 0 ? "(alsa)" : "(pipe)", "[----------]");
+				else if (vol > 0 && vol <= 7)
+					sprintf(value+i, "%s%s", server == 0 ? "(alsa)" : "(pipe)", "[■---------]");
+				else if (vol > 7 && vol <= 18)
+					sprintf(value+i, "%s%s", server == 0 ? "(alsa)" : "(pipe)", "[■■--------]");
+				else if (vol > 18 && vol <= 30)
+					sprintf(value+i, "%s%s", server == 0 ? "(alsa)" : "(pipe)", "[■■■-------]");
+				else if (vol > 30 && vol <= 41)
+					sprintf(value+i, "%s%s", server == 0 ? "(alsa)" : "(pipe)", "[■■■■------]");
+				else if (vol > 41 && vol <= 53)
+					sprintf(value+i, "%s%s", server == 0 ? "(alsa)" : "(pipe)", "[■■■■■-----]");
+				else if (vol > 53 && vol <= 64)
+					sprintf(value+i, "%s%s", server == 0 ? "(alsa)" : "(pipe)", "[■■■■■■----]");
+				else if (vol > 64 && vol <= 76)
+					sprintf(value+i, "%s%s", server == 0 ? "(alsa)" : "(pipe)", "[■■■■■■■---]");
+				else if (vol > 76 && vol <= 87)
+					sprintf(value+i, "%s%s", server == 0 ? "(alsa)" : "(pipe)", "[■■■■■■■■--]");
+				else if (vol > 87 && vol <= 99)
+					sprintf(value+i, "%s%s", server == 0 ? "(alsa)" : "(pipe)", "[■■■■■■■■■-]");
+				else if (vol > 99 && vol <= 100)
+					sprintf(value+i, "%s^c%s^%s^d^", server == 0 ? "(alsa)" : "(pipe)", color9, "[■■■■■■■■■■]");
+/*		pulseaudio...
 				if (vol == 0)
 					sprintf(value+i, "%s", "(-.-) [----------]");
-				else if (vol > 0 && vol <= 7)
-					sprintf(value+i, "%s", "(alsa)[■---------]");
-				else if (vol > 7 && vol <= 18)
-					sprintf(value+i, "%s", "(alsa)[■■--------]");
-				else if (vol > 18 && vol <= 30)
-					sprintf(value+i, "%s", "(alsa)[■■■-------]");
-				else if (vol > 30 && vol <= 41)
-					sprintf(value+i, "%s", "(alsa)[■■■■------]");
-				else if (vol > 41 && vol <= 53)
-					sprintf(value+i, "%s", "(alsa)[■■■■■-----]");
-				else if (vol > 53 && vol <= 64)
-					sprintf(value+i, "%s", "(alsa)[■■■■■■----]");
-				else if (vol > 64 && vol <= 76)
-					sprintf(value+i, "%s", "(alsa)[■■■■■■■---]");
-				else if (vol > 76 && vol <= 87)
-					sprintf(value+i, "%s", "(alsa)[■■■■■■■■--]");
-				else if (vol > 87 && vol <= 99)
-					sprintf(value+i, "%s", "(alsa)[■■■■■■■■■-]");
-				else if (vol > 99 && vol <= 100)
 					sprintf(value+i, "(alsa)^c%s^%s^d^", color9, "[■■■■■■■■■■]");
-				// pulseaudio...
 				else if (vol > 200 && vol <= 8000)
 					sprintf(value+i, "%s", "(puls)[■---------]");
 				else if (vol > 8000 && vol <= 15000)
@@ -531,7 +541,8 @@ const char *getstsmods(int clk, const char *fak, char *value)
 					sprintf(value+i, "%s", "(puls)[■■■■■■■■■-]");
 				else if (vol > 60500 && vol <= 66000)
 					sprintf(value+i, "(puls)^c%s^%s^d^", color9, "[■■■■■■■■■■]");
-/*					sprintf(value+i, "%s", "[     ]");
+*/ /*	monocolor-theme...
+					sprintf(value+i, "%s", "[     ]");
 				else if (vol > 0 && vol <= 10)
 					sprintf(value+i, "%s", "[░    ]");
 				else if (vol > 10 && vol <= 25)
