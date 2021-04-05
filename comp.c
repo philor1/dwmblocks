@@ -28,7 +28,7 @@ const char *getstsmods(int clk, const char *fak, char *value)
 	{
 		switch (clk) {
 			case 0: break;
-			case 1: system("PID=$(ps aux | grep 'st -c dbar -n psmem' | grep -v grep | awk '{print $2}'); if [ -z $PID ] ; then st -c dbar -n psmem -e psmem; else killall psmem; fi"); break;
+			case 1: system("PID=$(ps aux | grep 'st -c dbar -n psmem' | grep -v grep | awk '{print $2}') && kill $PID || st -c dbar -n psmem -e psmem &"); break;
 			case 2: break;
 			case 3: break;
 			case 4: break;
@@ -89,7 +89,7 @@ const char *getstsmods(int clk, const char *fak, char *value)
 	{
 		switch (clk) {
 			case 0: break;
-			case 1: system("PID=$(ps aux | grep 'st -c dbar -n htop' | grep -v grep | awk '{print $2}'); if [ -z $PID ] ; then st -c dbar -n htop -e htop; else killall htop; fi"); break;
+			case 1: system("PID=$(ps aux | grep 'st -c dbar -n htop' | grep -v grep | awk '{print $2}') && kill $PID || st -c dbar -n htop -e htop &"); break;
 			case 2: break;
 			case 3: break;
 			case 4: break;
@@ -187,7 +187,7 @@ const char *getstsmods(int clk, const char *fak, char *value)
 	{
 		switch (clk) {
 			case 0: break;
-			case 1: system("PID=$(ps aux | grep 'st -c dbar -n calen' | grep -v grep | awk '{print $2}'); if [ -z $PID ] ; then st -c dbar -n calen -e calen; else killall calen; fi"); break;
+			case 1: system("PID=$(ps aux | grep 'st -c dbar -n calen' | grep -v grep | awk '{print $2}') && kill $PID || st -c dbar -n calen -e calen &"); break;
 			case 2: break;
 			case 3: break;
 			case 4: break;
@@ -204,7 +204,7 @@ const char *getstsmods(int clk, const char *fak, char *value)
 	{
 		switch (clk) {
 			case 0: break;
-			case 1: system("PID=$(ps aux | grep 'st -c dbar -n calcurse' | grep -v grep | awk '{print $2}'); if [ -z $PID ] ; then st -c dbar -n calcurse -e calcurse; else killall calcurse; fi"); break;
+			case 1: system("PID=$(ps aux | grep 'st -c dbar -n calcurse' | grep -v grep | awk '{print $2}') && kill $PID || st -c dbar -n calcurse -e calcurse &"); break;
 			case 2: break;
 			case 3: break;
 			case 4: break;
@@ -405,8 +405,8 @@ const char *getstsmods(int clk, const char *fak, char *value)
 			case 1: break;
 			case 2: break;
 			case 3: break;
-			case 4: system("xbacklight -inc 1"); break;
-			case 5: system("xbacklight -dec 1"); break;
+			case 4: system("backlight_control +7"); break;
+			case 5: system("backlight_control -7"); break;
 		}
 		file = fopen(max_brightness, "r");
 		if (file != NULL) {
