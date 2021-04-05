@@ -8,20 +8,20 @@ const char *power_battery_name = "BAT0";			// Found in /sys/class/power_supply/B
 
 //Modify this file to change what commands output to your statusbar, and recompile using the make command.
 static const Block blocks[] = {
-	/*Icon*/		/*Isfunc*/	/*Command*/					/*Update Interval*/	/*Update Signal*/
-	{ "Vol",		1,		"volume",					0,			11 },	// v -> for volume
-	{ "Bkl",		1,		"xbacklight",				0,			13 },	// x -> for backlight
-	{ "Std",		1,		"ltime",					1,			0 },	// l -> time
-	{ "Day",		1,		"datet",					3600,		0 },	// d -> date
-	{ "Cpu",		1,		"cpustat",					1,			0 },	// c -> for cpu
-	{ "Ram",		1,		"memstat",					1,			0 },	// m -> for memory
-	{ "Wifi",		1,		"wifistat",					1,			0 },	// w -> for wifi
-	{ "Lan",		1,		"netlan",					1,			0 },	// n -> Lan network
-	{ "Bat",		1,		"power",					1,			0 },	// p ->	power / battery
-	{ "Upd",		1,		"updatestat",				0,	    	12 },	// u -> updates
-//	{ "Usb",		1,		"busb",						0,			14 },	// b -> usb / pen drives plugged
-//	{ "Fon",		1,		"android",					0,			15 },	// a -> android plugged
-//	{ "Tm",			1,		"transmission",				60,			0 },	// t -> torrent status transmission
+	/*Icon*/	/*Isfunc*/	/*Command*/		/*Update Interval*/	/*Update Signal*/
+	{ "Vol",		1,		"volume",					0,			1 },
+	{ "Bkl",		1,		"xbacklight",				0,			2 },
+	{ "Std",		1,		"ltime",					1,			3 },
+	{ "Day",		1,		"datet",					3600,		4 },
+	{ "Cpu",		1,		"cpustat",					1,			5 },
+	{ "Ram",		1,		"memstat",					1,			6 },
+	{ "Wifi",		1,		"wifistat",					1,			7 },
+	{ "Lan",		1,		"netlan",					1,			8 },
+	{ "Bat",		1,		"power",					1,			9 },
+	{ "Upd",		1,		"updatestat",				0,	    	10 },
+//	{ "Usb",		1,		"busb",						0,			11 },
+//	{ "Fon",		1,		"android",					0,			12 },
+//	{ "Tm",			1,		"transmission",				60,			13 },
 };
 
 //sets delimeter between status commands. NULL character ('\0') means no delimeter.

@@ -21,9 +21,20 @@ const char *getstsmods(int clk, const char *fak, char *value)
 	int i = strlen(value);
 	time_t t;
 	FILE * file;
-	if (strcmp(fak, "memstat") == 0)		//______________________________
-	{                                       //			MEMORY
-		file = fopen("/proc/meminfo","r");  //------------------------------
+//__________________________________________________________________________________
+//			MEMORY
+//----------------------------------------------------------
+	if (strcmp(fak, "memstat") == 0)
+	{
+		switch (clk) {
+			case 0: break;
+			case 1: system("PID=$(ps aux | grep 'st -c dbar -n psmem' | grep -v grep | awk '{print $2}'); if [ -z $PID ] ; then st -c dbar -n psmem -e psmem; else killall psmem; fi"); break;
+			case 2: break;
+			case 3: break;
+			case 4: break;
+			case 5: break;
+		}
+		file = fopen("/proc/meminfo","r");
 		if (file != NULL)
 		{
 			int memusage;
@@ -70,9 +81,20 @@ const char *getstsmods(int clk, const char *fak, char *value)
 			else
 				sprintf(value+i, "[%d%^c%s^%s^d^]",memusage, color9, membar[1] );
 		}
-	}										//______________________________
-	if (strcmp(fak, "cpustat") == 0)        //			CPU
-	{                                       //------------------------------
+	}
+//__________________________________________________________________________________
+//			CPU
+//----------------------------------------------------------
+	if (strcmp(fak, "cpustat") == 0)
+	{
+		switch (clk) {
+			case 0: break;
+			case 1: system("PID=$(ps aux | grep 'st -c dbar -n htop' | grep -v grep | awk '{print $2}'); if [ -z $PID ] ; then st -c dbar -n htop -e htop; else killall htop; fi"); break;
+			case 2: break;
+			case 3: break;
+			case 4: break;
+			case 5: break;
+		}
 		file = fopen("/proc/stat","r");
 		if (file != NULL) {
 			#define CPU_NBR 4
@@ -115,7 +137,7 @@ const char *getstsmods(int clk, const char *fak, char *value)
 					} else {
 						cpu_percent[j] = 0;
 						cpu_bar[j] = "▫▫▫▫▫";
-					}		
+					}
 */
 					if (cpu_percent[j] == 0)
 						cpu_bar[j] = "▁";
@@ -157,21 +179,54 @@ const char *getstsmods(int clk, const char *fak, char *value)
 		else
 			sprintf(value+i, "[ %s %s %s %s ] Tmp[%d˚C]", cpu_bar[0], cpu_bar[1], cpu_bar[2], cpu_bar[3], cputemp);
 		}
-	}										//______________________________
-	if (strcmp(fak, "datet") == 0)          //			DATE
-	{                                       //------------------------------
+	}
+//__________________________________________________________________________________
+//			DATE
+//----------------------------------------------------------
+	if (strcmp(fak, "datet") == 0)
+	{
+		switch (clk) {
+			case 0: break;
+			case 1: system("PID=$(ps aux | grep 'st -c dbar -n calen' | grep -v grep | awk '{print $2}'); if [ -z $PID ] ; then st -c dbar -n calen -e calen; else killall calen; fi"); break;
+			case 2: break;
+			case 3: break;
+			case 4: break;
+			case 5: break;
+		}
 		time(&t);
 		struct tm *date = localtime(&t);
 		sprintf(value+i, "[%02d-%02d]", date->tm_mday, date->tm_mon+1);
-	}										//______________________________
-	if (strcmp(fak, "ltime") == 0)          //			TIME
-	{                                       //------------------------------
+	}
+//__________________________________________________________________________________
+//			TIME
+//----------------------------------------------------------
+	if (strcmp(fak, "ltime") == 0)
+	{
+		switch (clk) {
+			case 0: break;
+			case 1: system("PID=$(ps aux | grep 'st -c dbar -n calcurse' | grep -v grep | awk '{print $2}'); if [ -z $PID ] ; then st -c dbar -n calcurse -e calcurse; else killall calcurse; fi"); break;
+			case 2: break;
+			case 3: break;
+			case 4: break;
+			case 5: break;
+		}
 		time(&t);
 		struct tm *time = localtime(&t);
 		sprintf(value+i, "[%02d:%02d]", time->tm_hour, time->tm_min);
-	}										//______________________________
-	if (strcmp(fak, "wifistat") == 0)       //			WIFI
-	{                                       //------------------------------
+	}
+//__________________________________________________________________________________
+//			WIFI
+//----------------------------------------------------------
+	if (strcmp(fak, "wifistat") == 0)
+	{
+		switch (clk) {
+			case 0: break;
+			case 1: system("networkmanager_dmenu"); break;
+			case 2: break;
+			case 3: break;
+			case 4: break;
+			case 5: break;
+		}
 		file = fopen(wifi_opstate,"r");
 		if (file != NULL) {
 			char wifiState[4];
@@ -211,9 +266,12 @@ const char *getstsmods(int clk, const char *fak, char *value)
 			} else
 				sprintf(value+i, "%s", "[---off--]");
 		}
-	}										//______________________________
-	if (strcmp(fak, "netlan") == 0)         //			NETWORK
-	{                                       //------------------------------
+	}
+//__________________________________________________________________________________
+//			NETWORK
+//----------------------------------------------------------
+	if (strcmp(fak, "netlan") == 0)
+	{
 		file = fopen(lan_opstate, "r");
 		if (file != NULL) {
 			char lanopstate[4];
@@ -237,9 +295,12 @@ const char *getstsmods(int clk, const char *fak, char *value)
 				sprintf(value+i, "%s", "[═]");
 			}
 		}
-	}										//______________________________
-	if (strcmp(fak, "updatestat") == 0)     //			UPDATE
-	{                                       //------------------------------
+	}
+//__________________________________________________________________________________
+//			UPDATE
+//----------------------------------------------------------
+	if (strcmp(fak, "updatestat") == 0)
+	{
 		file = fopen("/home/philipp/.cache/updates","r");
 		if (file != NULL) {
 			int u = 0;
@@ -251,9 +312,12 @@ const char *getstsmods(int clk, const char *fak, char *value)
 				value[0] = '\0';
 		} else
 			value[0] = '\0';
-	}										//______________________________
-	if (strcmp(fak, "android") == 0)        //			ANDROID
-	{                                       //------------------------------
+	}
+//__________________________________________________________________________________
+//			ANDROID
+//----------------------------------------------------------
+	if (strcmp(fak, "android") == 0)
+	{
 		file = popen("mtp-detect 2>/dev/null | awk '/Model/' | wc -l", "r");
 		if (file != NULL) {
 			int devs = 0;
@@ -264,9 +328,12 @@ const char *getstsmods(int clk, const char *fak, char *value)
 			else
 				value[0] = '\0';
 		}
-	}										//______________________________
-	if (strcmp(fak, "busb") == 0)           //			USB
-	{                                       //------------------------------
+	}
+//__________________________________________________________________________________
+//			USB
+//----------------------------------------------------------
+	if (strcmp(fak, "busb") == 0)
+	{
 		file = popen("lsblk -lo RM,TYPE | grep '1 disk' | wc -l", "r");
 		if (file != NULL) {
 			int devs = 0;
@@ -297,9 +364,12 @@ const char *getstsmods(int clk, const char *fak, char *value)
 				value[0] = '\0';
 			}
 		}
-	}										//______________________________
-	if (strcmp(fak, "transmission") == 0)   //			TRANSMISSION
-	{                                       //------------------------------
+	}
+//__________________________________________________________________________________
+//			TRANSMISSION
+//----------------------------------------------------------
+	if (strcmp(fak, "transmission") == 0)
+	{
 		file = popen("transmission-remote -l | wc -l", "r");
 		if (file != NULL) {
 			int torrents = 0;
@@ -324,9 +394,20 @@ const char *getstsmods(int clk, const char *fak, char *value)
 			} else
 				value[0] = '\0';
 		}
-	}										//______________________________
-	if (strcmp(fak, "xbacklight") == 0)     //			BACKLIGHT
-	{                                       //------------------------------
+	}
+//__________________________________________________________________________________
+//			BACKLIGHT
+//----------------------------------------------------------
+	if (strcmp(fak, "xbacklight") == 0)
+	{
+		switch (clk) {
+			case 0: break;
+			case 1: break;
+			case 2: break;
+			case 3: break;
+			case 4: system("xbacklight -inc 1"); break;
+			case 5: system("xbacklight -dec 1"); break;
+		}
 		file = fopen(max_brightness, "r");
 		if (file != NULL) {
 			int light;
@@ -383,9 +464,20 @@ const char *getstsmods(int clk, const char *fak, char *value)
 
 */
 		}
-	}										//______________________________
-	if (strcmp(fak, "volume") == 0)         //			VOLUME
-	{                                       //------------------------------
+	}
+//__________________________________________________________________________________
+//			VOLUME
+//----------------------------------------------------------
+	if (strcmp(fak, "volume") == 0)
+	{
+		switch (clk) {
+			case 0: break;
+			case 1: system("audiosel -o &"); break;
+			case 2: system("audiosel -s &"); break;
+			case 3: system("/usr/bin/amixer set Master toggle"); break;
+			case 4: system("/usr/bin/amixer -q sset Master 5%+"); break;
+			case 5: system("/usr/bin/amixer -q sset Master 5%-"); break;
+		}
 		file = popen("amixer sget Master | tail -n 1 | cut -d ' ' -f8 | cut -b 3", "r");
 		if (file != NULL) {
 			char mute[1];
@@ -466,9 +558,12 @@ const char *getstsmods(int clk, const char *fak, char *value)
 			} else
 				sprintf(value+i, "^c%s^(mute)^d^%s", color9, "[----------]");
 		}
-	}										//______________________________
-	if (strcmp(fak, "power") == 0)			//			POWER
-	{										//------------------------------
+	}
+//__________________________________________________________________________________
+//			POWER
+//----------------------------------------------------------
+	if (strcmp(fak, "power") == 0)
+	{
 		;
 		int status;
 		int online;
@@ -549,7 +644,7 @@ const char *getstsmods(int clk, const char *fak, char *value)
 		if (delim[0] != '\0') {
 			//only chop off newline if one is present at the end
 			i = value[i-1] == '\n' ? i-1 : i;
-			strncpy(value+i, delim, delimLen); 
+			strncpy(value+i, delim, delimLen);
 		}
 }
 
