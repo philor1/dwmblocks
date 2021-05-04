@@ -75,11 +75,11 @@ const char *getstsmods(int clk, const char *fak, char *value)
 			else
 				membar[1] = "█";
 			if ( memusage <= 33)
-				sprintf(value+i, "[%d%^c%s^%s^d^]",memusage, color10, membar[1] );
+				sprintf(value+i, "[%d%^c%s^%s^d^]",memusage, color2, membar[1] );
 			else if ( memusage > 33 && memusage <= 66)
-				sprintf(value+i, "[%d%^c%s^%s^d^]",memusage, color11, membar[1] );
+				sprintf(value+i, "[%d%^c%s^%s^d^]",memusage, color3, membar[1] );
 			else
-				sprintf(value+i, "[%d%^c%s^%s^d^]",memusage, color9, membar[1] );
+				sprintf(value+i, "[%d%^c%s^%s^d^]",memusage, color1, membar[1] );
 		}
 	}
 //__________________________________________________________________________________
@@ -175,7 +175,7 @@ const char *getstsmods(int clk, const char *fak, char *value)
 			} else
 				cputemp = 0;
 		if (cputemp >= 70)
-			sprintf(value+i, "[ %s %s %s %s ]  Tmp[^c%s^%d˚C^d^]", cpu_bar[0], cpu_bar[1], cpu_bar[2], cpu_bar[3], color9, cputemp);
+			sprintf(value+i, "[ %s %s %s %s ]  Tmp[^c%s^%d˚C^d^]", cpu_bar[0], cpu_bar[1], cpu_bar[2], cpu_bar[3], color1, cputemp);
 		else
 			sprintf(value+i, "[ %s %s %s %s ]  Tmp[%d˚C]", cpu_bar[0], cpu_bar[1], cpu_bar[2], cpu_bar[3], cputemp);
 		}
@@ -439,7 +439,7 @@ const char *getstsmods(int clk, const char *fak, char *value)
 			else if (light > 30 && light <= 60)
 				sprintf(value+i, "%s",   "[■■■■■■■■■-]");
 			else
-				sprintf(value+i, "^c%s^%s^d^", color9,  "[■■■■■■■■■■]");
+				sprintf(value+i, "^c%s^%s^d^", color1,  "[■■■■■■■■■■]");
 
 /*			if (light >= 0 && light <= 10)
 				sprintf(value+i, "%s", "{░    }");
@@ -516,11 +516,11 @@ const char *getstsmods(int clk, const char *fak, char *value)
 				else if (vol > 87 && vol <= 99)
 					sprintf(value+i, "%s%s", server == 0 ? "(alsa)" : "(pipe)", "[■■■■■■■■■-]");
 				else if (vol > 99 && vol <= 100)
-					sprintf(value+i, "%s^c%s^%s^d^", server == 0 ? "(alsa)" : "(pipe)", color9, "[■■■■■■■■■■]");
+					sprintf(value+i, "%s^c%s^%s^d^", server == 0 ? "(alsa)" : "(pipe)", color1, "[■■■■■■■■■■]");
 /*		pulseaudio...
 				if (vol == 0)
 					sprintf(value+i, "%s", "(-.-) [----------]");
-					sprintf(value+i, "(alsa)^c%s^%s^d^", color9, "[■■■■■■■■■■]");
+					sprintf(value+i, "(alsa)^c%s^%s^d^", color1, "[■■■■■■■■■■]");
 				else if (vol > 200 && vol <= 8000)
 					sprintf(value+i, "%s", "(puls)[■---------]");
 				else if (vol > 8000 && vol <= 15000)
@@ -540,7 +540,7 @@ const char *getstsmods(int clk, const char *fak, char *value)
 				else if (vol > 54000 && vol <= 60500)
 					sprintf(value+i, "%s", "(puls)[■■■■■■■■■-]");
 				else if (vol > 60500 && vol <= 66000)
-					sprintf(value+i, "(puls)^c%s^%s^d^", color9, "[■■■■■■■■■■]");
+					sprintf(value+i, "(puls)^c%s^%s^d^", color1, "[■■■■■■■■■■]");
 */ /*	monocolor-theme...
 					sprintf(value+i, "%s", "[     ]");
 				else if (vol > 0 && vol <= 10)
@@ -567,7 +567,7 @@ const char *getstsmods(int clk, const char *fak, char *value)
 				else
 					sprintf(value+i, "[%d]", vol);
 			} else
-				sprintf(value+i, "^c%s^(mute)^d^%s", color9, "[----------]");
+				sprintf(value+i, "^c%s^(mute)^d^%s", color1, "[----------]");
 		}
 	}
 //__________________________________________________________________________________
@@ -634,19 +634,19 @@ const char *getstsmods(int clk, const char *fak, char *value)
 				batbar[1] = "█";
 
 		if (online != 0)
-			sprintf(value+i, "^b%s^^c%s^[%d%%%s]^d^", color10, color0, status, batbar[1]);
+			sprintf(value+i, "^b%s^^c%s^[%d%%%s]^d^", color3, color0, status, batbar[1]);
 		else
 		{
 			if (status < 15)
-				sprintf(value+i, "^b%s^^c%s^[%d%%%s]^d^", color9, color0, status, batbar[1]);
+				sprintf(value+i, "^b%s^^c%s^[%d%%%s]^d^", color2, color0, status, batbar[1]);
 			else
 			{
 				if (status >= 15 && status < 33)
-					sprintf(value+i, "[%d%^c%s^%s^d^]", status, color9, batbar[1]);
+					sprintf(value+i, "[%d%^c%s^%s^d^]", status, color2, batbar[1]);
 				if (status >= 33 && status < 66)
-					sprintf(value+i, "[%d%^c%s^%s^d^]", status, color11, batbar[1]);
+					sprintf(value+i, "[%d%^c%s^%s^d^]", status, color4, batbar[1]);
 				if (status >= 66)
-					sprintf(value+i, "[%d%^c%s^%s^d^]", status, color10, batbar[1]);
+					sprintf(value+i, "[%d%^c%s^%s^d^]", status, color3, batbar[1]);
 			}
 		}
 	}
