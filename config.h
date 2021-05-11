@@ -22,9 +22,9 @@ static const Block blocks[] = {
 //	{ " Usb",		1,		"busb",						0,			11 },
 //	{ " Fon",		1,		"android",					0,			12 },
 //	{ " Tm",		1,		"transmission",				60,			13 },
-	{ " >>>",       0,      "block-config", 			0,          14 },
+	{ " >>> ",		0,      "block-config", 			0,          14 },
 };
 
 //sets delimeter between status commands. NULL character ('\0') means no delimeter.
 static char delim[] = " ";
-static unsigned int delimLen = 2;
+static unsigned int delimLen = 1;

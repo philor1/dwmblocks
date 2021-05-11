@@ -85,6 +85,8 @@ void getcmd(const Block *block, char *output)
 	if (isfunc != 1) {	// If the block has IsFunc set to 0
 		strcpy(output, block->icon);
 		FILE *cmdf;
+        if (!cmdf)
+                return;
 		if (*button) {
 			setenv("BUTTON", button, 1);
 			cmdf = popen(block->command,"r");
@@ -93,8 +95,6 @@ void getcmd(const Block *block, char *output)
 		} else {
 			cmdf = popen(block->command,"r");
 		}
-        if (!cmdf)
-                return;
         int i = strlen(block->icon);
         fgets(output+i, CMDLENGTH-i-delimLen, cmdf);
         i = strlen(output);
@@ -119,7 +119,6 @@ void getcmd(const Block *block, char *output)
 		} else {
 			getstsmods(0, block->command, output);
 		}
-
 	}
 }
 
