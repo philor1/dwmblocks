@@ -59,11 +59,11 @@ if (strcmp(fak, "memstat") == 0)
 		else
 			membar[1] = "█";
 		if ( memusage <= 33)
-			sprintf(value+i, "[%d%^c%s^%s^d^]",memusage, color2, membar[1] );
+			sprintf(value+i, "[%d%^c%s^%s^d^]",memusage, color10, membar[1] );
 		else if ( memusage > 33 && memusage <= 66)
-			sprintf(value+i, "[%d%^c%s^%s^d^]",memusage, color3, membar[1] );
+			sprintf(value+i, "[%d%^c%s^%s^d^]",memusage, color11, membar[1] );
 		else
-			sprintf(value+i, "[%d%^c%s^%s^d^]",memusage, color1, membar[1] );
+			sprintf(value+i, "[%d%^c%s^%s^d^]",memusage, color9, membar[1] );
 	}
 }
 
@@ -145,7 +145,7 @@ if (strcmp(fak, "cpustat") == 0)
 		} else
 			cputemp = 0;
 	if (cputemp >= 70)
-		sprintf(value+i, "[ %s %s %s %s ]  Tmp[^c%s^%d˚C^d^]", cpu_bar[0], cpu_bar[1], cpu_bar[2], cpu_bar[3], color1, cputemp);
+		sprintf(value+i, "[ %s %s %s %s ]  Tmp[^c%s^%d˚C^d^]", cpu_bar[0], cpu_bar[1], cpu_bar[2], cpu_bar[3], color9, cputemp);
 	else
 		sprintf(value+i, "[ %s %s %s %s ]  Tmp[%d˚C]", cpu_bar[0], cpu_bar[1], cpu_bar[2], cpu_bar[3], cputemp);
 	}
@@ -436,7 +436,7 @@ if (strcmp(fak, "xbacklight") == 0)
 		else if (light > 30 && light <= 60)
 			sprintf(value+i, "%s",   "[■■■■■■■■■-]");
 		else
-			sprintf(value+i, "^c%s^%s^d^", color1,  "[■■■■■■■■■■]");
+			sprintf(value+i, "^c%s^%s^d^", color9,  "[■■■■■■■■■■]");
 	}
 }
 
@@ -493,11 +493,11 @@ if (strcmp(fak, "volume") == 0)
 			else if (vol > 87 && vol <= 99)
 				sprintf(value+i, "%s%s", server == 0 ? "(alsa)" : "(pipe)", "[■■■■■■■■■-]");
 			else if (vol > 99 && vol <= 100)
-				sprintf(value+i, "%s^c%s^%s^d^", server == 0 ? "(alsa)" : "(pipe)", color1, "[■■■■■■■■■■]");
+				sprintf(value+i, "%s^c%s^%s^d^", server == 0 ? "(alsa)" : "(pipe)", color9, "[■■■■■■■■■■]");
 			else
 				sprintf(value+i, "[%d]", vol);
 		} else
-			sprintf(value+i, "^c%s^(mute)^d^%s", color1, "[----------]");
+			sprintf(value+i, "^c%s^(mute)^d^%s", color9, "[----------]");
 	}
 }
 
